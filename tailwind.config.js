@@ -10,6 +10,12 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        lamaSky : '#C3EBFA',
+        lamaSkyLight : '#EDF9FD',
+        lamaPurpule : '#CFCEFF',
+        lamaPurpuleLingh : '#F1F0FF',
+        lamaYellow : '#FAE27C',
+        lamaYellow : '#FEFCE8'
       },
     },
   },
