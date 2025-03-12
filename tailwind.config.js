@@ -13,9 +13,9 @@ module.exports = {
         lamaSky : '#C3EBFA',
         lamaSkyLight : '#EDF9FD',
         lamaPurpule : '#CFCEFF',
-        lamaPurpuleLingh : '#F1F0FF',
+        lamaPurpuleLight : '#F1F0FF',
         lamaYellow : '#FAE27C',
-        lamaYellow : '#FEFCE8'
+        lamaYellowLight : '#FEFCE8'
       },
     },
   },

@@ -9,6 +9,7 @@ import { IoMdLogOut } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import { role } from "../../lib/data";
 
 const iconMap: { [key: string]: React.ComponentType } = {
     FaHome,
@@ -28,67 +29,80 @@ const menuItems = [
             {
                 icon : 'FaHome',
                 label : "Home",
-                href : '/'
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'PiChalkboardTeacherFill',
                 label : "Teachers",
-                href : '/teacher'
+                href : '/teacher',
+                visible : ['admin', 'teacher'],
             },
             {
                 icon : 'PiStudentBold',
                 label : "Students",
-                href : '/student'
+                href : '/student',
+                visible : ['admin', 'teacher'],
             },
             {
                 icon : 'RiParentLine',
                 label : "Parents",
-                href : '/parent'
+                href : '/parent',
+                visible : ['admin', 'teacher'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Classes",
+                href : '/',
+                visible : ['admin', 'teacher'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Lessons",
+                href : '/',
+                visible : ['admin', 'teacher'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Exams",
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Alignments",
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Results",
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Attendance",
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Events",
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Messages",
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
-                label : "Home",
-                href : '/'
+                label : "Announcements",
+                href : '/',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
         ]
     },
@@ -98,17 +112,20 @@ const menuItems = [
             {
                 icon : 'IoPersonCircle',
                 label : "Profile",
-                href : '/profile'
+                href : '/profile',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'IoIosSettings',
                 label : "Setting",
-                href : '/setting'
+                href : '/setting',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'IoMdLogOut',
                 label : "Logout",
-                href : '/logout'
+                href : '/logout',
+                visible : ['admin', 'teacher', 'student','parent'],
             },
             
         ]
@@ -121,14 +138,21 @@ const Menu = () =>{
             {menuItems.map(i=>(
                 <div className="flex flex-col gap-2" key={i.title}>
                     <span className="hidden lg:block text-gray-400 font-light my-4">{i.title}</span>
-                    {i.items.map(item=>(
-                        <Link href={item.href} key={item.label} className="flex items-center justify-content lg:justify-start gap-4 text-gray-500 py-2">
-                            {/* {<item.icon/>} */}
-                            <FaHome/>
-                          {/* <Image src={item.icon} alt="" width={20} height={20} /> */}
-                           <span className="hidden lg:block">{item.label}</span>
-                        </Link>
-                    ))}
+
+                    {i.items.map((item) =>{
+                        if(item.visible.includes(role)){
+                            {item.label}
+                            console.log(item.label);
+                            return(
+                                <Link href={item.href} key={item.label} className="flex items-center justify-content lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight">
+                                {<item.icon/>}
+                                <FaHome/>
+                                    <span className="hidden lg:block">{item.label}</span>
+                                </Link>
+                            )
+                          
+                        }
+                    })}    
                 </div>
             ))}
         </div>
