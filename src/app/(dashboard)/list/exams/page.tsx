@@ -10,6 +10,7 @@ import { FaEye } from "react-icons/fa";
 import {  examsData, lessonsData, role, } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import FormModal from "../../../components/FormModal";
 
 type Exams = {
     id : number;
@@ -56,11 +57,16 @@ const ExamsListPage = () =>{
 
             <td>
                 <div className="flex items-center gap-2">
-                    <Link href={`/list/teachers/${item.id}`}>
+                    {/* <Link href={`/list/teachers/${item.id}`}>
                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
-                    </Link>
+                    </Link> */}
                     {role === "admin" &&(
-                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                        //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                        <>
+                        <FormModal table="event" type="update" data={item} />
+                        <FormModal table="event" type="delete" id={item.id} />
+                    </>
+                
                     )}
                 </div>
             </td>
@@ -82,7 +88,8 @@ const ExamsListPage = () =>{
                             <FaSortAmountDown />
                         </button>
                         { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                            <FaPlus />
+                            {/* <FaPlus /> */}
+                            <FormModal table="event" type="create" />
                         </button>}
                     </div>
                 </div>

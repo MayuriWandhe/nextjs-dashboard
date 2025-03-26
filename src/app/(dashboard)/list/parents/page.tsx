@@ -10,6 +10,7 @@ import { FaEye } from "react-icons/fa";
 import { parentsData, role, studentsData, teachersData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import FormModal from "../../../components/FormModal";
 
 type Parents = {
     id : number;
@@ -55,11 +56,17 @@ const ParentListPage = () =>{
             <td className="hidden md:table-cell">{item.address}</td>
             <td>
                 <div className="flex items-center gap-2">
-                    <Link href={`/list/teachers/${item.id}`}>
+                    {/* <Link href={`/list/teachers/${item.id}`}>
                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
-                    </Link>
+                    </Link> */}
+                    
+
                     {role === "admin" &&(
-                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                        //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                        <>
+                            <FormModal table="parent" type="update" data={item} />
+                            <FormModal table="parent" type="delete" id={item.id} />
+                        </>
                     )}
                 </div>
             </td>
@@ -81,7 +88,8 @@ const ParentListPage = () =>{
                             <FaSortAmountDown />
                         </button>
                         { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                            <FaPlus />
+                            {/* <FaPlus /> */}
+                            <FormModal table="parent" type="create"/>
                         </button>}
                     </div>
                 </div>

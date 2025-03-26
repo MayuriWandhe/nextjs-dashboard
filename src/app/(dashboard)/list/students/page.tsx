@@ -9,6 +9,7 @@ import Link from "next/link";
 import { FaEye } from "react-icons/fa";
 import { role, studentsData, teachersData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import FormModal from "../../../components/FormModal";
 
 type Student = {
     id : number;
@@ -68,7 +69,8 @@ const StudentListPage = () =>{
                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaEye /></button>
                     </Link>
                     {role === "admin" &&(
-                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                        //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                        <FormModal table="student" type="delete" id={item.id} />
                     )}
                 </div>
             </td>
@@ -90,7 +92,8 @@ const StudentListPage = () =>{
                             <FaSortAmountDown />
                         </button>
                         { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                            <FaPlus />
+                            {/* <FaPlus /> */}
+                            <FormModal table="student" type="create" />
                         </button>}
                     </div>
                 </div>
