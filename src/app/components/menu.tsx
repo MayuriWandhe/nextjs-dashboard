@@ -51,6 +51,12 @@ const menuItems = [
                 visible : ['admin', 'teacher'],
             },
             {
+                icon : 'RiParentLine',
+                label : "Subjects",
+                href : '/list/subject',
+                visible : ['admin', 'teacher'],
+            },
+            {
                 icon : 'FaHome',
                 label : "Classes",
                 href : '/',
