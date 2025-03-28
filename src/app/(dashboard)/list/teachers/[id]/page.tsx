@@ -13,6 +13,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Announcement from "../../../../components/Announcment";
 import Link from "next/link";
 import Performance from "../../../../components/Performance";
+import FormModal from "../../../../components/FormModal";
 
 const SingleTeacherPage = () =>{
     return (
@@ -28,7 +29,22 @@ const SingleTeacherPage = () =>{
                             width={144} height={144} className=''/> */}
                         </div>
                         <div className="w-2/3 flex flex-col justify-between gap-4">
+                        <div className="flex ietms-center gap-4">
                             <h1 className="text-xl font-semibold">Leonard Snyder</h1>
+                            <FormModal table="teacher" type="update" data={{
+                                id: 1,
+                                username : "test user",
+                                email : "user@gmail.com",
+                                password : "12345678",
+                                firstName : "testUserName",
+                                lastName : "testUserLastName",
+                                phone : "+91 1234567890",
+                                address : "test address",
+                                bloodType : "O +ve",
+                                birthday : "1999-07-25",
+                                sex : "female",
+                            }}/>
+                        </div>
                             <p className="text-sm text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
                             <div className="flex item-center justify-between gap-2 flex-wrap text-xs font-medium">
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">

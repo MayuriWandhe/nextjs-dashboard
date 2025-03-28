@@ -10,7 +10,7 @@ const schema = z.object({
     .min(3, { message: 'Username must be at least 3 characters long!' })
     .max(8, { message: 'Username must be at most 8 characters long!' }),
     email: z.string().email({message : 'Invalid email address!'}),
-    password: z.string().min(8, {message : 'Password must be 8 characters long!'}),
+    password: z.number().min(8, {message : 'Password must be 8 characters long!'}),
     firstName : z.string().min(1, {message : 'First name is required!'}),
     lastName : z.string().min(1, {message : 'Last name is required!'}),
     phone : z.string().min(10, {message : 'Phone no. is required!'}),
@@ -23,7 +23,7 @@ const schema = z.object({
 
   type Inputs = z.infer<typeof schema>;
 
-const TeacherForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
+const StudentForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
     const { register, handleSubmit, formState: { errors }, } = useForm<Inputs>({
         resolver: zodResolver(schema),
       });
@@ -33,7 +33,7 @@ const TeacherForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
       })
     return(
         <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-            <h1 className="text-xl font-semibold flex text-start">Create a new teacher</h1>
+            <h1 className="text-xl font-semibold flex text-start">Create a new Student</h1>
             <span className="text-xs text-gray-400 font-medium flex text-start">Authentication information</span>
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <InputField label="Username" name="username" defaultValue={data?.username} register={register} error={errors.username}  />
@@ -77,7 +77,7 @@ const TeacherForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
     )
 }
 
-export default TeacherForm;
+export default StudentForm;
 
 function handleSubmit(arg0: (data: any) => void) {
     throw new Error("Function not implemented.");
