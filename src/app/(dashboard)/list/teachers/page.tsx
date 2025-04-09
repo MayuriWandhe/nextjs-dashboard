@@ -10,7 +10,7 @@ import { FaEye } from "react-icons/fa";
 import { role, teachersData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import FormModal from "../../../components/FormModal";
-import { Class, Subject, Teacher } from "@prisma/client";
+import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
 
@@ -77,9 +77,32 @@ const TeacherListPage = async({
     const p = page ? parseInt(page) : 1;
 
     console.log(searchParams);
+
+    const query : Prisma.TeacherWhereInput = {};
+
+    // URL Conditions
+    if(queryParams){
+        for(const [key, value] of Object.entries(queryParams)){
+            if(value !== undefined){
+                switch(key){
+                    case "classId": 
+                        query.lessons = {
+                            some: {
+                                classId : parseInt(value)
+                            }
+                        }
+                    break;
+                    case "search" : 
+                        query.name = { contains : value, mode : "insensitive" }
+                    
+                }
+            }
+        }
+    }
     
     const [data, count ] = await prisma.$transaction([
          prisma.teacher.findMany({
+            where : query,
             include :{
                 subjects : true,
                 classes : true
@@ -87,7 +110,7 @@ const TeacherListPage = async({
             take : ITEM_PER_PAGE ,
             skip : ITEM_PER_PAGE * (p-1)
         }),
-        prisma.teacher.count()
+        prisma.teacher.count({where : query})
     ])
     
     console.log(data, count);
