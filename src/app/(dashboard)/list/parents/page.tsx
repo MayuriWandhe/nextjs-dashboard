@@ -11,16 +11,11 @@ import { parentsData, role, studentsData, teachersData } from "../../../../lib/d
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import FormModal from "../../../components/FormModal";
+import { Parent, Prisma, Student } from "@prisma/client";
+import prisma from "../../../../lib/prisma";
+import { ITEM_PER_PAGE } from "../../../../lib/settings";
 
-type Parents = {
-    id : number;
-    name : string;
-    phone : string;
-    subjects : string;
-    class : string;
-    address : string;
-    students : string[];
-} 
+type ParentList = Parent & {student : Student[]}
 
 const colums = [
     {
@@ -40,18 +35,54 @@ const colums = [
     }
 ]
 
-const ParentListPage = () =>{
-    const renderRow = (item : Parents) =>(
+const ParentListPage =  async({
+    searchParams,
+}:{
+    searchParams : { [key : string ] : string } | undefined; 
+}) =>{
+    const {page, ...queryParams } = searchParams;
+    const p = page ? parseInt(page) : 1;
+
+    console.log(searchParams);
+
+    const query : Prisma.ParentWhereInput = {};
+
+    // URL Conditions
+    if(queryParams){
+        for(const [key, value] of Object.entries(queryParams)){
+            if(value !== undefined){
+                switch(key){
+                    case "search" : 
+                        query.name = { contains : value, mode : "insensitive" }
+                        break;
+                }
+            }
+        }
+    }
+    
+    const [data, count ] = await prisma.$transaction([
+         prisma.parent.findMany({
+            where : query,
+            include :{
+                students : true
+            },
+            take : ITEM_PER_PAGE ,
+            skip : ITEM_PER_PAGE * (p-1)
+        }),
+        prisma.parent.count({where : query})
+    ])
+    
+    const renderRow = (item : ParentList) =>(
         <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpuleLight">
             <td className="flex items-center gap-4 p-4">
                 {/* <FaRegUserCircle className="w-7 h-7 md:hidden xl:block rounded-full object-cover"/> */}
                 {/* <img src="{item.photo}" alt="" width={40} height={40} className="md:hidden xl:bolck w-10 h-10 rounded-full object-cover"/> */}
                 <div className="flex-flex-col">
                     <h3 className="font-semibold">{item.name}</h3>
-                    <p className="text-xs text-gray-500">{item?.class}</p>
+                    <p className="text-xs text-gray-500">{item?.email}</p>
                 </div>
             </td>
-            <td className="hidden md:table-cell">{item.students.join(", ")}</td>
+            <td className="hidden md:table-cell">{item.students.map(student => student.name).join(", ")}</td>
             <td className="hidden md:table-cell">{item.phone}</td>
             <td className="hidden md:table-cell">{item.address}</td>
             <td>
@@ -96,10 +127,10 @@ const ParentListPage = () =>{
             </div>
 
             {/* List */}
-            <Table columns={colums} renderRow={renderRow} data={parentsData}/>
+            <Table columns={colums} renderRow={renderRow} data={data}/>
 
             {/* Pagination */}
-            <Pagination />
+            <Pagination page={p} count={count}/>
         </div>
     );
 };
