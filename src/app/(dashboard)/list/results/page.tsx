@@ -10,17 +10,22 @@ import { FaEye } from "react-icons/fa";
 import {  examsData, lessonsData, resultsData, role, } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import { Assignment, Exam, Prisma, Result, Student } from "@prisma/client";
+import prisma from "../../../../lib/prisma";
+import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { title } from "process";
 
-type Results = {
+type ResultsList ={
     id : number;
-    subject: string,
-    class : string;
-    teacher: string,
-    student: string,
-    date: string,
-    type: string,
-    score: number,
-} 
+    title : string;
+    studentName : string;
+    studentSurname : string;
+    teacherName : string;
+    teacherSurname : string;
+    score : number;
+    className : string;
+    startTime : Date;
+}
 
 const colums = [
     {
@@ -53,33 +58,117 @@ const colums = [
     }
 ]
 
-const ResultsListPage = () =>{
-    const renderRow = (item : Results) =>(
-        <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpuleLight">
-            <td className="flex items-center gap-4 p-4">
-                {/* <FaRegUserCircle className="w-7 h-7 md:hidden xl:block rounded-full object-cover"/> */}
-                {/* <img src="{item.photo}" alt="" width={40} height={40} className="md:hidden xl:bolck w-10 h-10 rounded-full object-cover"/> */}
-                <div className="flex-flex-col">
-                    <h3 className="font-semibold">{item.subject}</h3>
-                </div>
-            </td>
-            <td className="hidden md:table-cell">{item.class}</td>
-            <td className="hidden md:table-cell">{item.teacher}</td>
-            <td className="hidden md:table-cell">{item.date}</td>
-            <td className="hidden md:table-cell">{item.student}</td>
-            <td className="hidden md:table-cell">{item.score}</td>
-            <td>
-                <div className="flex items-center gap-2">
-                    <Link href={`/list/teachers/${item.id}`}>
-                        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
-                    </Link>
-                    {role === "admin" &&(
-                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
-                    )}
-                </div>
-            </td>
-        </tr>
-   )
+
+const renderRow = (item : ResultsList) =>(
+    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpuleLight">
+        <td className="flex items-center gap-4 p-4">
+            {/* <FaRegUserCircle className="w-7 h-7 md:hidden xl:block rounded-full object-cover"/> */}
+            {/* <img src="{item.photo}" alt="" width={40} height={40} className="md:hidden xl:bolck w-10 h-10 rounded-full object-cover"/> */}
+            <div className="flex-flex-col">
+                <h3 className="font-semibold">{item.title}</h3>
+            </div>
+        </td>
+        <td className="hidden md:table-cell">{item.studentName} {item.studentName}</td>
+        <td className="hidden md:table-cell">{item.className}</td>
+        <td className="hidden md:table-cell">{item.teacherName} {item.teacherSurname}</td>
+        {/* <td className="hidden md:table-cell">{item.student}</td> */}
+        <td className="hidden md:table-cell">{item.score}</td>
+        <td>
+            <div className="flex items-center gap-2">
+                <Link href={`/list/teachers/${item.id}`}>
+                    <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
+                </Link>
+                {role === "admin" &&(
+                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                )}
+            </div>
+        </td>
+    </tr>
+)
+
+const ResultsListPage = async({
+    searchParams,
+}:{
+    searchParams : { [key : string ] : string } | undefined; 
+}) =>{
+    const {page, ...queryParams } = searchParams;
+    const p = page ? parseInt(page) : 1;
+
+    console.log(searchParams);
+
+    const query : Prisma.ResultWhereInput = {};
+
+    // URL Conditions
+    if(queryParams){
+        for(const [key, value] of Object.entries(queryParams)){
+            if(value !== undefined){
+                switch(key){
+                    case "sutudentId": 
+                        query.studentId = value;
+                    case "search" : 
+                        query.OR = [
+                            { exam : { title : { contains : value, mode : "insensitive" }}},
+                            { student : { name : { contains : value, mode : "insensitive" }}}
+                        ];
+                        break;
+                    default:
+                        break;
+                    
+                            
+                }
+            }
+        }
+    }
+    
+    const [dataRes, count ] = await prisma.$transaction([
+         prisma.result.findMany({
+            where : query,
+            include :{
+                exam :{
+                    include : {
+                        lesson : {
+                            select : {
+                                class : {select : {name : true}},
+                                teacher :   {select : {name : true}},
+                            }
+                        }
+                    },
+                },
+                assignment :{
+                    include : {
+                        lesson : {
+                            select : {
+                                class : {select : {name : true}},
+                                teacher :   {select : {name : true}},
+                            }
+                        }
+                    },
+                },
+                student : {select : {name : true}},
+            },
+            take : ITEM_PER_PAGE ,
+            skip : ITEM_PER_PAGE * (p-1)
+        }),
+        prisma.result.count({where : query})
+    ])
+
+
+    const data = dataRes.map((item)=>{
+        const assessment = item.exam || item.assignment;
+        if(!assessment) return null;
+        const isExam = "startTime" in assessment;
+        return {
+            id : item.id,
+            title : assessment.title,
+            studentName : item.student.name,
+            studentSurname : item.student.surname,
+            teacherName : assessment.teacher,
+            teacherSurame : assessment.teacher,
+            score : item.score,
+            className : assessment.lesson.class.name,
+            startTime : isExam ? assessment.startTime : assessment.startDate
+        }
+    })
 
     return (
         <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -103,10 +192,10 @@ const ResultsListPage = () =>{
             </div>
 
             {/* List */}
-            <Table columns={colums} renderRow={renderRow} data={resultsData}/>
+            <Table columns={colums} renderRow={renderRow} data={data}/>
 
             {/* Pagination */}
-            <Pagination />
+            <Pagination page={p} count={count} />
         </div>
     );
 };
