@@ -35,19 +35,19 @@ const menuItems = [
             {
                 icon : 'PiChalkboardTeacherFill',
                 label : "Teachers",
-                href : '/teacher',
+                href : '/list/teacher',
                 visible : ['admin', 'teacher'],
             },
             {
                 icon : 'PiStudentBold',
                 label : "Students",
-                href : '/student',
+                href : '/list/student',
                 visible : ['admin', 'teacher'],
             },
             {
                 icon : 'RiParentLine',
                 label : "Parents",
-                href : '/parent',
+                href : '/list/parent',
                 visible : ['admin', 'teacher'],
             },
             {
@@ -59,43 +59,43 @@ const menuItems = [
             {
                 icon : 'FaHome',
                 label : "Classes",
-                href : '/',
+                href : '/list/classes',
                 visible : ['admin', 'teacher'],
             },
             {
                 icon : 'FaHome',
                 label : "Lessons",
-                href : '/',
+                href : '/list/lessons',
                 visible : ['admin', 'teacher'],
             },
             {
                 icon : 'FaHome',
                 label : "Exams",
-                href : '/',
+                href : '/list/exams',
                 visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
-                label : "Alignments",
-                href : '/',
+                label : "Assignments",
+                href : '/list/assignments',
                 visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
                 label : "Results",
-                href : '/',
+                href : '/list/results',
                 visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
                 label : "Attendance",
-                href : '/',
+                href : '/list/Attendance',
                 visible : ['admin', 'teacher', 'student','parent'],
             },
             {
                 icon : 'FaHome',
                 label : "Events",
-                href : '/',
+                href : '/list/events',
                 visible : ['admin', 'teacher', 'student','parent'],
             },
             {
@@ -107,7 +107,7 @@ const menuItems = [
             {
                 icon : 'FaHome',
                 label : "Announcements",
-                href : '/',
+                href : '/list/announcements',
                 visible : ['admin', 'teacher', 'student','parent'],
             },
         ]
