@@ -1,40 +1,43 @@
+"use client";
 
-// 'use client'
+import * as Clerk from "@clerk/elements/common";
+import * as SignIn from "@clerk/elements/sign-in";
+import Image from "next/image";
 
-// import React from 'react'
-// import { ClerkProvider, SignedIn, SignIn } from '@clerk/nextjs'
+const LoginPage = () =>{
+    return (
+        <div className='h-screen flex items-center justify-center bg-lamaSkyLight'>
+        <SignIn.Root>
+            <SignIn.Step name='start' className="bg-white rounded-md p-12 g-4 shadow-2xl flex flex-col gap-2">
 
-// const LoginPage = () =>{
-//     return (
-//         <div className='h-screen flex items-center justify-center bg-lamaSkyLight'>
-//             <SignIn.Root>
-//                 <SignIn.Step>
-//                     <h1>School Lama</h1>
-//                     <h1>Sign in to create an Account</h1>
+                <h1 className="flex items-center text-xl font-bold gap-2">
+                    <Image src="/logo.jpg" alt="" width={24} height={24} />
+                    School Lama
+                </h1>
+                <h2 className="text-gray-400">Sign in to create an Account</h2>
 
-//                     <Clerk.GlobalError />
-//                     <Clerk.Field>
-                        
-//                     </Clerk.Field>
-//                 </SignIn.Step>
-//             </SignIn.Root>
-//         </div>
-//     )
-// }
+                <Clerk.GlobalError className="text-sm text-red-400"/>
 
-// export default LoginPage
+                <Clerk.Field name="identifier" className="flex flex-col gap-2">
+                    <Clerk.Label className="text-xs text-gray-500">Username</Clerk.Label>
+                    <Clerk.Input  type="text" className="p-2 rounded-md ring-1 ring-gray-500"/>
+                    <Clerk.FieldError  className="text-sm text-red-400" />
+                </Clerk.Field>
 
-// 'use client'
+                <Clerk.Field name="password" className="flex flex-col gap-2">
+                    <Clerk.Label  className="text-xs text-gray-500">Password</Clerk.Label>
+                    <Clerk.Input  type="password"  className="p-2 rounded-md ring-1 ring-gray-500"/>
+                    <Clerk.FieldError  className="text-sm text-red-400" />
+                </Clerk.Field>
 
-// import React from 'react'
-// import { SignIn } from '@clerk/nextjs'
+                <SignIn.Action submit className="bg-blue-500 text-white my-1 rounded-md text-sm p-[10px]">Sign In</SignIn.Action>
+            </SignIn.Step>
+        </SignIn.Root>
 
-// const LoginPage = () => {
-//     return (
-//         <div className='h-screen flex items-center justify-center bg-lamaSkyLight'>
-//             <SignIn />
-//         </div>
-//     )
-// }
+        </div>
 
-// export default LoginPage
+    );
+}
+
+export default LoginPage
+

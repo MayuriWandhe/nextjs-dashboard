@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { GrAnnounce } from "react-icons/gr";
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = () =>{
     return (
@@ -24,7 +25,8 @@ const Navbar = () =>{
                     <span className="text-sm leading-3 font-medium">Rushali Wandhe</span>
                     <span className="text-[10px] text-gray-500 text-right">Admin</span>
                 </div>
-                <Image src="/profile.png" alt="logo" width={32} height={32} className="rounded-full"/>
+                {/* <Image src="/profile.png" alt="logo" width={32} height={32} className="rounded-full"/> */}
+                <UserButton />
             </div>
         </div>
     )
