@@ -35,27 +35,27 @@ const menuItems = [
             {
                 icon : 'PiChalkboardTeacherFill',
                 label : "Teachers",
-                href : '/list/teacher',
+                href : '/list/teachers',
                 visible : ['admin', 'teacher'],
             },
             {
                 icon : 'PiStudentBold',
                 label : "Students",
-                href : '/list/student',
+                href : '/list/students',
                 visible : ['admin', 'teacher'],
             },
             {
                 icon : 'RiParentLine',
                 label : "Parents",
-                href : '/list/parent',
+                href : '/list/parents',
                 visible : ['admin', 'teacher'],
             },
-            {
-                icon : 'RiParentLine',
-                label : "Subjects",
-                href : '/list/subject',
-                visible : ['admin', 'teacher'],
-            },
+            // {
+            //     icon : 'RiParentLine',
+            //     label : "Subjects",
+            //     href : '/list/subject',
+            //     visible : ['admin', 'teacher'],
+            // },
             {
                 icon : 'FaHome',
                 label : "Classes",
@@ -86,12 +86,12 @@ const menuItems = [
                 href : '/list/results',
                 visible : ['admin', 'teacher', 'student','parent'],
             },
-            {
-                icon : 'FaHome',
-                label : "Attendance",
-                href : '/list/Attendance',
-                visible : ['admin', 'teacher', 'student','parent'],
-            },
+            // {
+            //     icon : 'FaHome',
+            //     label : "Attendance",
+            //     href : '/list/Attendance',
+            //     visible : ['admin', 'teacher', 'student','parent'],
+            // },
             {
                 icon : 'FaHome',
                 label : "Events",

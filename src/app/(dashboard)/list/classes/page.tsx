@@ -131,7 +131,7 @@ const ClassesListPage = async({
             </div>
 
             {/* List */}
-            <Table columns={colums} renderRow={renderRow} data={classesData}/>
+            <Table columns={colums} renderRow={renderRow} data={data}/>
 
             {/* Pagination */}
             <Pagination page={p} count={count} />
