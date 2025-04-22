@@ -1,3 +1,4 @@
+import { currentUser } from "@clerk/nextjs/server";
 import { title } from "process"
 import { FaHome } from "react-icons/fa";
 import { PiChalkboardTeacherFill } from "react-icons/pi";
@@ -9,6 +10,7 @@ import { IoMdLogOut } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { role } from "../../lib/data";
 
 const iconMap: { [key: string]: React.ComponentType } = {
@@ -138,7 +140,10 @@ const menuItems = [
     }
 ]
 
-const Menu = () =>{
+const Menu =  async () =>{
+    // const user =  await currentUser();
+    // const role = await user?.publicMetadata.role as string;
+
     return (
         <div className="mt-4 text-sm">
             {menuItems.map(i=>(
@@ -148,7 +153,6 @@ const Menu = () =>{
                     {i.items.map((item) =>{
                         if(item.visible.includes(role)){
                             {item.label}
-                            console.log(item.label);
                             return(
                                 <Link href={item.href} key={item.label} className="flex items-center justify-content lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight">
                                 {<item.icon/>}
@@ -165,4 +169,4 @@ const Menu = () =>{
     )
 }
 
-export default Menu
+export default Menu;
