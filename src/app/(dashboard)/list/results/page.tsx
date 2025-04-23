@@ -7,13 +7,14 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import {  examsData, lessonsData, resultsData, role, } from "../../../../lib/data";
+import {  examsData, lessonsData, resultsData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { Assignment, Exam, Prisma, Result, Student } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
 import { title } from "process";
+import { currentUserId, role } from "../../../../lib/util";
 
 type ResultsList ={
     id : number;
@@ -53,9 +54,9 @@ const colums = [
         header : "Date", accessor : "date", className : "hidden lg:table-cell"
     },
 
-    {
+   ...(role === 'admin' || role === 'teacher' ?[ {
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
 
 
@@ -120,6 +121,37 @@ const ResultsListPage = async({
         }
     }
     
+
+
+    // role conditions
+    switch (role) {
+        case 'admin':
+            break;
+        case 'teacher' :
+            query.OR = [
+                {
+                    exam : {
+                        lesson : { teacherId : currentUserId! }
+                    }
+                },
+                {
+                    assignment : {
+                        lesson : { teacherId : currentUserId! }
+                    }
+                }
+            ]
+            break;
+        case 'student' : 
+            query.studentId = currentUserId!;
+            break;
+        case 'parent' :
+            query.stuedentId = {
+                parentId : currentUserId!;
+            }
+        default:
+            break;
+    }
+
     const [dataRes, count ] = await prisma.$transaction([
          prisma.result.findMany({
             where : query,
@@ -184,7 +216,7 @@ const ResultsListPage = async({
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <FaSortAmountDown />
                         </button>
-                        { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                        { (role === 'admin' || role === 'teacher') && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <FaPlus />
                         </button>}
                     </div>

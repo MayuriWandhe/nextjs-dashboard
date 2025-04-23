@@ -9,13 +9,14 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import {  eventsData, examsData, lessonsData, resultsData, role, } from "../../../../lib/data";
+import {  eventsData, examsData, lessonsData, resultsData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import FormModal from "../../../components/FormModal";
 import { Class, Event, Prisma } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { role } from "../../../../lib/util";
 
 type EventsList = Event & {class : Class}
 
@@ -35,9 +36,9 @@ const colums = [
     {
         header : "End Time", accessor : "endTime", className : "hidden lg:table-cell"
     },
-    {
+   ...(role === 'admin' || role === 'teacher' ? [ {
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
 
 

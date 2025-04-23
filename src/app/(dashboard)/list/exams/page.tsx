@@ -7,13 +7,15 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import {  examsData, lessonsData, role, } from "../../../../lib/data";
+import {  examsData, lessonsData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import FormModal from "../../../components/FormModal";
 import { Class, Exam, Lesson, Prisma, Teacher } from "@prisma/client";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
 import prisma from "../../../../lib/prisma";
+import { currentUserId, role } from "../../../../lib/util";
+import { currentUser } from "@clerk/nextjs/server";
 
 type ExamsList = Exam & {lesson : Lesson} & {class : Class} & {teacher : Teacher}
 
@@ -33,9 +35,9 @@ const colums = [
     {
         header : "Date", accessor : "date", className : "hidden lg:table-cell"
     },
-    {
+    ...(role === 'admin' || role === 'teacher' ? [{
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
 
 const renderRow = (item : ExamsList) =>(
@@ -57,7 +59,7 @@ const renderRow = (item : ExamsList) =>(
                 {/* <Link href={`/list/teachers/${item.id}`}>
                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
                 </Link> */}
-                {role === "admin" &&(
+                {( role === "admin" ||  role === "teacher" )&& (
                     //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
                     <>
                         <FormModal table="event" type="update" data={item} />
@@ -82,26 +84,56 @@ const ExamsListPage = async({
     console.log(searchParams);
 
     const query : Prisma.ExamWhereInput = {};
-
+    query.lesson = {};
     // URL Conditions
     if(queryParams){
         for(const [key, value] of Object.entries(queryParams)){
             if(value !== undefined){
                 switch(key){
                     case "classId": 
-                        query.lesson = {classId : parseInt(value)}
+                        query.lesson.classId = parseInt(value)
                         break;
                     case "lesson": 
-                        query.lesson ={
-                            teacherId : value,
-                        }
+                        query.lesson.teacherId = value;
                         break;
                     case "search" : 
-                        query.lesson = {subject : {name : { contains : value, mode : "insensitive" }}}
-                    
+                        query.lesson.subject = {
+                            name : { contains : value, mode : "insensitive" },
+                        }
+                        break;
                 }
             }
         }
+    }
+
+
+    // Role conditions
+    switch (role) {
+        case 'admin':
+            break;
+        case 'teacher' :
+            query.lesson.teacherId = currentUser!;
+            break;
+        case 'teacher' :
+            query.lesson.class = {
+                students : {
+                    some : {
+                        id : currentUserId!,
+                    }
+                }
+            }
+            break;
+        case 'parent' :
+            query.lesson.class = {
+                students : {
+                    some : {
+                        parent : currentUserId!,
+                    }
+                }
+            }
+            break;
+        default:
+            break;
     }
     
     const [data, count ] = await prisma.$transaction([

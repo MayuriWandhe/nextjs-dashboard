@@ -7,12 +7,13 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import { role, teachersData } from "../../../../lib/data";
+import {  teachersData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import FormModal from "../../../components/FormModal";
 import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { role } from "../../../../lib/util";
 
 type TeacherList = Teacher & { subjects : Subject[] } & { classes : Class[] }
 const colums = [
@@ -34,9 +35,9 @@ const colums = [
     {
         header : "Addess", accessor : "address", className : "hidden lg:table-cell"
     },
-    {
+    ...(role === 'admin' || role === 'students' ? [{
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
 
 const renderRow = (item : TeacherList) =>(

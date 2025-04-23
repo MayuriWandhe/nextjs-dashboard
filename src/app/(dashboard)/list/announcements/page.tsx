@@ -7,12 +7,15 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import {  announcementsData, assignmentsData, examsData, lessonsData, role, } from "../../../../lib/data";
+import {  announcementsData, assignmentsData, examsData, lessonsData} from "../../../../lib/data";
+
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { Announcement, Class, Prisma } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { auth } from "@clerk/nextjs/server";
+import { currentUserId, role } from "../../../../lib/util";
 
 type AnnouncementsList = Announcement & {class : Class}
 
@@ -31,9 +34,9 @@ const colums = [
     {
         header : "Date", accessor : "Date", className : "hidden lg:table-cell"
     },
-    {
+    ...(role === 'admin' ?[{
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : []),
 ]
 
 
@@ -94,6 +97,21 @@ const AnnouncementsListPage = async({
             }
         }
     }
+
+
+        // role conditions
+
+        const roleConditions = {
+            teacher : { lessons : { some : { teacherId : currentUserId! } } },
+            student : { lessons : { some : { teacherId : currentUserId! } } },
+            parent : { lessons : { some : { teacherId : currentUserId! } } },
+        }
+    
+        query.OR = [
+            { classId : null},
+            { class : roleConditions[role as keyof typeof roleConditions]  || {}, }
+        ]
+    
     
     const [data, count ] = await prisma.$transaction([
          prisma.announcement.findMany({

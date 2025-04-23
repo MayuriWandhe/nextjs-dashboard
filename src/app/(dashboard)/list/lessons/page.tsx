@@ -7,13 +7,14 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import {  lessonsData, role, } from "../../../../lib/data";
+import {  lessonsData, } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import FormModal from "../../../components/FormModal";
 import { Class, Lesson, Prisma, Subject, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { currentUserId, role } from "../../../../lib/util";
 
 type LessonsList = Lesson & {subject : Subject} & {class : Class} & {teacher : Teacher}
 
@@ -30,9 +31,9 @@ const colums = [
     {
         header : "Teacher", accessor : "teacher", className : "hidden lg:table-cell"
     },
-    {
+    ...(role === 'admin' || role === 'techer' ?[{
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
 
    
@@ -98,6 +99,34 @@ const LessonsListPage = async({
             }
         }
     }
+
+
+    // role conditions
+
+    const roleConditions = {
+        teacher : { lessons : { some : { teacherId : currentUserId } } },
+        student : { lessons : { some : { teacherId : currentUserId } } },
+        parent : { lessons : { some : { teacherId : currentUserId } } },
+    }
+
+    query.OR = [
+        { classId : null},
+        { class : roleConditions[role as keyof typeof roleConditions]  || {}, }
+    ]
+
+    // switch (role) {
+    //     case 'admin':
+    //         break;
+    //     case 'teacher':
+    //         query.OR = [
+    //             {classId : null},
+    //             {class : {lessons : {some : {teacherId : currentUserId!}}}}
+    //         ]
+    //     break;
+    
+    //     default:
+    //         break;
+    // }
     
     const [data, count ] = await prisma.$transaction([
          prisma.lesson.findMany({

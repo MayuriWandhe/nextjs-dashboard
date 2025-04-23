@@ -7,12 +7,15 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import {  assignmentsData, examsData, lessonsData, role, } from "../../../../lib/data";
+import {  assignmentsData, examsData, lessonsData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { Assignment, Class, Lesson, Prisma, Subject, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUserId, role } from "../../../../lib/util";
+
 
 type AssignmentsList = Assignment & {lesson : Lesson} & {teacher : Teacher} & {subject : Subject} & {class : Class}
 
@@ -32,9 +35,9 @@ const colums = [
     {
         header : "dueDate", accessor : "dueDate", className : "hidden lg:table-cell"
     },
-    {
+    ...(role === 'admin' || role === 'teacher' ? [{
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
 
 
@@ -75,29 +78,63 @@ const AssignmentsListPage= async({
 
     console.log(searchParams);
 
+    // URL Conditions
+
     const query : Prisma.AssignmentWhereInput = {};
 
-    // URL Conditions
+    query.lesson = {}
     if(queryParams){
         for(const [key, value] of Object.entries(queryParams)){
             if(value !== undefined){
                 switch(key){
                     case "classId": 
-                        query.lesson = {classId : parseInt(value)}
+                        query.lesson.classId = parseInt(value)
                         break;
                     case "lesson": 
-                        query.lesson ={
-                            teacherId : value,
-                        }
+                        query.lesson.teacherId = value
                         break;
                     case "search" : 
-                        query.lesson = {subject : {name : { contains : value, mode : "insensitive" }}}
+                        query.lesson = {name : { contains : value, mode : "insensitive" }}
+                        break;
+                    default :
+                        break
                     
                 }
             }
         }
     }
     
+
+    // Role conditions
+
+    switch(role){
+        case 'admin':
+            break;
+        case 'teacher' : 
+            query.lesson.teacherId = currentUserId;
+            break;
+        case 'student' :
+            query.lesson.class = {
+                students : {
+                    some : {
+                        id : currentUserId!
+                    }
+                }
+            }
+            break;
+        case 'parent' :
+            query.lesson.class = {
+                students : {
+                    some : {
+                        parentId : currentUserId!
+                    }
+                }
+            }
+            break;
+        default : 
+            break;
+    }
+
     const [data, count ] = await prisma.$transaction([
          prisma.assignment.findMany({
             where : query,

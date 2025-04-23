@@ -7,13 +7,14 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import { parentsData, role, studentsData, teachersData } from "../../../../lib/data";
+import { parentsData, studentsData, teachersData } from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import FormModal from "../../../components/FormModal";
 import { Parent, Prisma, Student } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { role } from "../../../../lib/util";
 
 type ParentList = Parent & {student : Student[]}
 
@@ -30,9 +31,9 @@ const colums = [
     {
         header : "Addess", accessor : "address", className : "hidden lg:table-cell"
     },
-    {
+    ...(role === 'admin' ? [{
         header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
 
 const ParentListPage =  async({

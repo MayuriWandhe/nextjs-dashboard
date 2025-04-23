@@ -7,13 +7,14 @@ import Table from "../../../components/Table";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
-import { classesData, role } from "../../../../lib/data";
+import { classesData} from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import FormModal from "../../../components/FormModal";
 import { Class, Prisma, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import { role } from "../../../../lib/util";
 
 type ClassesList = Class & {supervisor : Teacher}
 
@@ -30,9 +31,9 @@ const colums = [
     {
         header : "Grade", accessor : "grade", className : "hidden lg:table-cell"
     },
-    {
+   ...(role  === 'admin' || role === 'techer' ? [ {
         header : "supervisor", accessor : "supervisor", className : "hidden lg:table-cell"
-    }
+    }] : [])
 ]
   
 const renderRow = (item : ClassesList) =>(

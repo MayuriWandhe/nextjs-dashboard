@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
 import { LuMessageCircleMore } from "react-icons/lu";
@@ -5,10 +7,12 @@ import { GrAnnounce } from "react-icons/gr";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 
-const Navbar = async () =>{
+const Navbar = () =>{
     // const user = await currentUser();
-    // const { isSignedIn, user, isLoaded } = useUser()
+    const {  user } = useUser()
 
+    console.log(user , "user");
+    
     return (
         <div className="flex item-centre justify-between p-4">
             {/* Search bar */}
@@ -27,9 +31,9 @@ const Navbar = async () =>{
                 </div>
                 <div className="flex flex-col">
                     <span className="text-sm leading-3 font-medium">Rushali Wandhe</span>
-                    <span className="text-[10px] text-gray-500 text-right">Admin</span>
+                    {/* <span className="text-[10px] text-gray-500 text-right">Admin</span> */}
 
-                    {/* <span className="text-[10px] text-gray-500 text-right">{user?.publicMetadata.role as string}</span> */}
+                    <span className="text-[10px] text-gray-500 text-right">{user?.publicMetadata.role as string}</span>
                 </div>
                 {/* <Image src="/profile.png" alt="logo" width={32} height={32} className="rounded-full"/> */}
                 <UserButton />
