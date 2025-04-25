@@ -1,43 +1,42 @@
 "use client";
 import React, { PureComponent } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { IoIosMore } from "react-icons/io";
 
-const data = [
-  {
-    name: 'Mon',
-    present: 40,
-    absent: 24,
-  },
-  {
-    name: 'Tue',
-    present: 30,
-    absent: 13,
-  },
-  {
-    name: 'wed',
-    present: 20,
-    absent: 98,
-  },
-  {
-    name: 'Thu',
-    present: 27,
-    absent: 39,
-  },
-  {
-    name: 'Fri',
-    present: 18,
-    absent: 48,
-  },
-];
+// const data = [
+//   {
+//     name: 'Mon',
+//     present: 40,
+//     absent: 24,
+//   },
+//   {
+//     name: 'Tue',
+//     present: 30,
+//     absent: 13,
+//   },
+//   {
+//     name: 'wed',
+//     present: 20,
+//     absent: 98,
+//   },
+//   {
+//     name: 'Thu',
+//     present: 27,
+//     absent: 39,
+//   },
+//   {
+//     name: 'Fri',
+//     present: 18,
+//     absent: 48,
+//   },
+// ];
 
-const AttendanceChart = () =>{
+const AttendanceChart = ({
+  data,
+} : {
+  data : {name : string; present : number ; absent : number }[];
+}) =>{
     return (
-        <div className="bg-white rounded-lg p-4 h-full w-full">
-            <div className='flex justify-between items-center'>
-                <h1 className='text-lg font-semibold'>Attendance</h1>
-                <IoIosMore />
-            </div>
+        
             <ResponsiveContainer width="100%" height="90%">
                 <BarChart
                 width={500}
@@ -54,7 +53,7 @@ const AttendanceChart = () =>{
                 <Bar dataKey="absent" fill="#C3EBFA" legendType="circle" radius={[10,10,0,0]}/>
                 </BarChart>
             </ResponsiveContainer>
-        </div>
+       
     )
 }
 
