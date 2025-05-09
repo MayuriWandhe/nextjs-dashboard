@@ -21,7 +21,7 @@ const EventList = async ({dateParam}:{dateParam : string | undefined}) =>{
                         <h1 className='font-semibold text-gray-600'>{event.title}</h1>
                         <span className='text-xs text-gray-300'>{event.startTime.toLocaleTimeString("en-UK", {
                             hour : "2-digit",
-                            mintue : "2-digit",
+                            minute : "2-digit",
                             hour12 : false,
                         })}</span>
                     </div>

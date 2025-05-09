@@ -13,6 +13,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { Prisma, Subject, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
+import FormModal from "../../../components/FormModal";
 
 type SubjectList = Subject & {teacher : Teacher[]}
 
@@ -114,9 +115,13 @@ const SubjectListPage =  async({
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <FaSortAmountDown />
                         </button>
-                        { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                            <FaPlus />
-                        </button>}
+                        { role === 'admin' && 
+                        <FormModal table="subject" type="create"/>
+                        // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                        //     <FaPlus />
+
+                        // </button>
+                        }
                     </div>
                 </div>
             </div>

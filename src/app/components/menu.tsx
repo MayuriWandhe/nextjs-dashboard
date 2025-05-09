@@ -65,12 +65,12 @@ const menuItems = [
                 href : '/list/parents',
                 visible : ['admin', 'teacher'],
             },
-            // {
-            //     icon : 'RiParentLine',
-            //     label : "Subjects",
-            //     href : '/list/subject',
-            //     visible : ['admin', 'teacher'],
-            // },
+            {
+                icon : <RiParentLine />,
+                label : "Subjects",
+                href : '/list/subjects',
+                visible : ['admin', 'teacher'],
+            },
             {
                 icon : <SiGoogleclassroom />,
                 label : "Classes",
