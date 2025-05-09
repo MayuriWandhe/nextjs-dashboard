@@ -15,7 +15,7 @@ export const createSubject = async (currentState : CurrentState, data : SubjectS
                 name : data.name
             }
         })
-        revalidatePath("/list/subjects");
+        // revalidatePath("/list/subjects");
         return { success : true, error: false}
     }catch (err){
         console.log(err);

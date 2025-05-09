@@ -7,6 +7,8 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 import { subjectSchema, SubjectSchema } from "../../../lib/formValidationSchema";
 import { createSubject } from "../../../lib/actions";
 import { useFormState } from "react-dom";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const SubjectForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
     const { register, handleSubmit, formState: { errors }, } = useForm<SubjectSchema>({
@@ -21,6 +23,15 @@ const SubjectForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
         console.log(data);
         formAction(data)
       })
+
+      useEffect(()=>{
+        if(state.success){
+            toast(`Subject has been ${type === 'create' ? 'created' : 'updated' }!`);
+        }else{
+            toast('Something went wrong!')
+        }
+      })
+
     return(
         <form className="flex flex-col gap-8" onSubmit={onSubmit}>
             <h1 className="text-xl font-semibold flex text-start">{type === 'create' ? "Create a new subject" : "Update the subject"}</h1>

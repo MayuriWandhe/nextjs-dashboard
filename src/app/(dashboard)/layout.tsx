@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import Menu from "../components/menu";
 import Navbar from "../components/navbar";
-  
+import { ToastContainer } from "react-toastify";
+
   export default function DashbaordLayout({ children, }: Readonly<{
     children : React.ReactNode
   }>) {
