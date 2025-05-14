@@ -43,9 +43,11 @@ const renderRow = (item : SubjectList) =>(
         <td className="hidden md:table-cell">{item.teachers.map(teacher=> teacher.name).join(", ")}</td>
         <td>
             <div className="flex items-center gap-2">
-                <Link href={`/list/teachers/${item.id}`}>
+            <FormModal table="subject" type="update" data={item} />
+            <FormModal table="subject" type="delete" data={item.id}/>
+                {/* <Link href={`/list/teachers/${item.id}`}>
                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
-                </Link>
+                </Link> */}
                 {role === "admin" &&(
                      <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
                 )}

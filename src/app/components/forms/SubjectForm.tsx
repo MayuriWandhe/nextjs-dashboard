@@ -7,16 +7,16 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 import { subjectSchema, SubjectSchema } from "../../../lib/formValidationSchema";
 import { createSubject } from "../../../lib/actions";
 import { useFormState } from "react-dom";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-const SubjectForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
+const SubjectForm = ({type, data, setOpen}:{type : "create" | "update"; data ?: any, setOpen : Dispatch<SetStateAction<boolean>>,}) =>{
     const { register, handleSubmit, formState: { errors }, } = useForm<SubjectSchema>({
         resolver: zodResolver(subjectSchema),
       });
 
     //   After react 19 it'll be useaction
-
     const [ state, formAction ] = useFormState(createSubject, {success: false, error:false})
 
       const onSubmit = handleSubmit((data)=>{
@@ -24,9 +24,13 @@ const SubjectForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
         formAction(data)
       })
 
+      const router = useRouter();
+
       useEffect(()=>{
         if(state.success){
             toast(`Subject has been ${type === 'create' ? 'created' : 'updated' }!`);
+            setOpen(false);
+            router.refresh();
         }else{
             toast('Something went wrong!')
         }
