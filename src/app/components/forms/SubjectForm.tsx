@@ -36,12 +36,8 @@ const SubjectForm = ({type, data, setOpen, relatedData}:{type : "create" | "upda
         }
       })
 
-      const { teachers } = relatedData;
-      console.log('teachers : ',teachers);
-      {teachers.map((teacher : {id: string; name : string; surname : string})=>{
-        console.log(teacher.name);
-        
-      })}
+      const { teachers } = relatedData;      
+
     return(
         <form className="flex flex-col gap-8" onSubmit={onSubmit}>
             <h1 className="text-xl font-semibold flex text-start">{type === 'create' ? "Create a new subject" : "Update the subject"}</h1>
@@ -53,34 +49,17 @@ const SubjectForm = ({type, data, setOpen, relatedData}:{type : "create" | "upda
                           Teachers
                         </label>
 
-                        <select 
-                        multiple 
-                        className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm" 
-                        {...register("teachers")} 
-                        defaultValue={data?.teachers}>
-                          
-                        {teachers.map(
-                          (teacher : { id: string; name : string; surname : string}) => (
-                            <option value={teacher.id} key={teacher.id}>
-                            {teacher.name + " " + teacher.surname}
-                            </option>
-                          )
-                          )}
-                        </select>
-
-
-                        {/*                        
-                          {teachers.map(
-                            (teacher: { id: string; name: string; surname: string }) => (
-                              <option value={teacher.id} key={teacher.id}>
+                        <select  multiple  className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm" 
+                          {...register("teachers")} defaultValue={data?.teachers}>
+                            {teachers.map(
+                              (teacher : { id: string; name : string; surname : string}) => (
+                                <option value={teacher.id} key={teacher.id}>
                                 {teacher.name + " " + teacher.surname}
-                              </option>
+                                </option>
+                              )
                             )
-                          )} */}
-
-
-
-
+                          }
+                        </select>
                         {errors.teachers?.message && <p className="text-xs text-red-400">{errors.teachers?.message.toString()}</p> }    
                 </div>
             </div>

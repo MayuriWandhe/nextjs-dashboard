@@ -7,19 +7,20 @@ import { IoMdClose } from "react-icons/io";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useFormState } from "react-hook-form";
-import { deleteSubject } from "../../lib/actions";
+import { deleteClass, deleteSubject } from "../../lib/actions";
 import { error } from "console";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from 'next/link'
 import { FormContainerProps } from "./FormContainer";
+// import ClassForm from "./forms/ClassForm";
 // import SubjectForm from "./forms/SubjectForm";
 // import TeacherForm from "./forms/TeacherForm";
 // import StudentForm from "./forms/StudentForm";
 
 const deleteActionMap = {
     subject : deleteSubject,
-    class : deleteSubject,
+    class : deleteClass,
     teacher : deleteSubject,
     student : deleteSubject,
     parent : deleteSubject,
@@ -44,6 +45,12 @@ const SubjectForm = dynamic(()=> import("./forms/SubjectForm"),{
     loading : () => <h1>Loading...</h1>
 })
 
+const ClassForm = dynamic(()=> import("./forms/ClassForm"),{
+    loading : () => <h1>Loading...</h1>
+})
+
+
+
 const forms : {
     [key : string]: (
         setOpen : Dispatch<SetStateAction<boolean>>, 
@@ -51,11 +58,14 @@ const forms : {
         data ? :any , 
         relatedData? : any
     ) => JSX.Element;
+    
 } = {
+    class : (setOpen, type, data, relatedData) => (<ClassForm type={type} data={data} setOpen={setOpen} relatedData={relatedData}  />),
     subject : (setOpen, type, data, relatedData) => (<SubjectForm type={type} data={data} setOpen={setOpen} relatedData={relatedData}  />),
     teacher : (setOpen, type, data, relatedData) => (<TeacherForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />),
     student : (setOpen, type, data, relatedData) => (<StudentForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />)
 }
+
 
 const FormModal = ({
     table, 
@@ -64,6 +74,7 @@ const FormModal = ({
     id, 
     relatedData,
 } : FormContainerProps & { relatedData? : any }) => {
+    
     const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
     const bgColor = type === "create" ? "bg-lamaYellow" : type === "update" ? "bg-lamaSky" :  type === "delete" ? "lamaPurpule" : 'red';
 

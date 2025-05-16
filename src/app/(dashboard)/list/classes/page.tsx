@@ -10,7 +10,7 @@ import { FaEye } from "react-icons/fa";
 import { classesData} from "../../../../lib/data";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
-import FormModal from "../../../components/FormModal";
+import FormContainer from "../../../components/FormContainer";
 import { Class, Prisma, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
@@ -51,14 +51,16 @@ const renderRow = (item : ClassesList) =>(
         <td className="hidden md:table-cell">{item.supervisor.name + " " + item.supervisor.surname}</td>
         <td>
             <div className="flex items-center gap-2">
+            <FormContainer table="class" type="update" data={item} />
+            <FormContainer table="class" type="delete" id={item.id} />
                 {/* <Link href={`/list/teachers/${item.id}`}>
                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
                 </Link> */}
                 {role === "admin" &&(
                     //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
                     <>
-                        <FormModal table="class" type="update" data={item} />
-                        <FormModal table="class" type="delete" id={item.id} />
+                        <FormContainer table="class" type="update" data={item} />
+                        <FormContainer table="class" type="delete" id={item.id} />
                     </>
                 
                 )}
@@ -123,10 +125,10 @@ const ClassesListPage = async({
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <FaSortAmountDown />
                         </button>
-                        { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                            {/* <FaPlus /> */}
-                            <FormModal table="class" type="create" />
-                        </button>}
+                        {/* { role === 'admin' &&  */}
+                            <FormContainer table="class" type="create" />
+                        {/* } */}
+                        
                     </div>
                 </div>
             </div>
