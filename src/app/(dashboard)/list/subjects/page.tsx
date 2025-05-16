@@ -14,6 +14,7 @@ import { Prisma, Subject, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
 import FormModal from "../../../components/FormModal";
+import FormContainer from "../../../components/FormContainer";
 
 type SubjectList = Subject & {teacher : Teacher[]}
 
@@ -43,8 +44,8 @@ const renderRow = (item : SubjectList) =>(
         <td className="hidden md:table-cell">{item.teachers.map(teacher=> teacher.name).join(", ")}</td>
         <td>
             <div className="flex items-center gap-2">
-            <FormModal table="subject" type="update" data={item} />
-            <FormModal table="subject" type="delete" data={item.id}/>
+            <FormContainer table="subject" type="update" data={item} />
+            <FormContainer table="subject" type="delete" data={item.id}/>
                 {/* <Link href={`/list/teachers/${item.id}`}>
                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
                 </Link> */}

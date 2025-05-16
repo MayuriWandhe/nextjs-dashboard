@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import InputField from "../InputField";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { Dispatch, SetStateAction } from "react";
 
 const schema = z.object({
     username: z.string()
@@ -23,7 +24,7 @@ const schema = z.object({
 
   type Inputs = z.infer<typeof schema>;
 
-const StudentForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
+const StudentForm = ({type, data, setOpen, relatedData}:{type : "create" | "update"; data ?: any, setOpen : Dispatch<SetStateAction<boolean>>, relatedData? : any}) =>{
     const { register, handleSubmit, formState: { errors }, } = useForm<Inputs>({
         resolver: zodResolver(schema),
       });

@@ -1,9 +1,10 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from 'zod';
+import { boolean, z } from 'zod';
 import { useForm } from 'react-hook-form';
 import InputField from "../InputField";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { Dispatch, SetStateAction } from "react";
 
 const schema = z.object({
     username: z.string()
@@ -23,7 +24,7 @@ const schema = z.object({
 
   type Inputs = z.infer<typeof schema>;
 
-const TeacherForm = ({type, data}:{type : "create" | "update"; data ?: any}) =>{
+const TeacherForm = ({type, data, setOpen}:{type : "create" | "update"; data ?: any, setOpen : Dispatch<SetStateAction<boolean>>}) =>{
     const { register, handleSubmit, formState: { errors }, } = useForm<Inputs>({
         resolver: zodResolver(schema),
       });

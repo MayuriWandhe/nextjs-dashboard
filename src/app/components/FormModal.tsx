@@ -12,6 +12,7 @@ import { error } from "console";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from 'next/link'
+import { FormContainerProps } from "./FormContainer";
 // import SubjectForm from "./forms/SubjectForm";
 // import TeacherForm from "./forms/TeacherForm";
 // import StudentForm from "./forms/StudentForm";
@@ -44,26 +45,32 @@ const SubjectForm = dynamic(()=> import("./forms/SubjectForm"),{
 })
 
 const forms : {
-    [key : string]: ( setOpen : Dispatch<SetStateAction<boolean>>, type : "create" | "update" , data ? :any ) => JSX.Element;
+    [key : string]: (
+        setOpen : Dispatch<SetStateAction<boolean>>, 
+        type : "create" | "update" , 
+        data ? :any , 
+        relatedData? : any
+    ) => JSX.Element;
 } = {
-    subject : (setOpen, type, data) => <SubjectForm type={type} data={data} setOpen={setOpen} />,
-    teacher : (setOpen, type, data) => <TeacherForm type={type} data={data} setOpen={setOpen} />,
-    student : (setOpen, type, data) => <StudentForm type={type} data={data} setOpen={setOpen} />
+    subject : (setOpen, type, data, relatedData) => (<SubjectForm type={type} data={data} setOpen={setOpen} relatedData={relatedData}  />),
+    teacher : (setOpen, type, data, relatedData) => (<TeacherForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />),
+    student : (setOpen, type, data, relatedData) => (<StudentForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />)
 }
 
-const FormModal = ({table, type, data, id} : {
-    table : | "teacher" | "student" | "parent" | "subject" | "class" | "lesson" | "exam" | "assignment" | "result" | "attendance" | "event" | "announcement";
-    type : "create" | "update" | "delete";
-    data ? : any;
-    id ? : number | string;
-}) => {
+const FormModal = ({
+    table, 
+    type, 
+    data, 
+    id, 
+    relatedData,
+} : FormContainerProps & { relatedData? : any }) => {
     const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
     const bgColor = type === "create" ? "bg-lamaYellow" : type === "update" ? "bg-lamaSky" :  type === "delete" ? "lamaPurpule" : 'red';
 
     const [open, setOpen] = useState(false);
 
     const Form = () =>{
-        const [state, formAction] = useFormState(deleteActionMap[table], { success : false, error : false });
+        // const [state, formAction] = useFormState(deleteActionMap[table], { success : false, error : false });
 
         const router = useRouter();
 
@@ -77,13 +84,13 @@ const FormModal = ({table, type, data, id} : {
         //     }
         //   })
 
-        useEffect(() => {
-            if (state.success) {
-              toast(`${table} has been deleted!`);
-              setOpen(false);
-              router.refresh();
-            }
-          }, [state, router]);
+        // useEffect(() => {
+        //     if (state.success) {
+        //       toast(`${table} has been deleted!`);
+        //       setOpen(false);
+        //       router.refresh();
+        //     }
+        //   }, [state, router]);
               
         return type === "delete" && data ? (
             <form action={formAction} className="p-4 flex flex-col gap-4">
@@ -93,7 +100,8 @@ const FormModal = ({table, type, data, id} : {
             </form>
         ) : type === "create" || type === "update" ? (
             // <StudentForm type="create"/>
-            forms[table](setOpen, type,data)
+            forms[table](setOpen, type,data, relatedData)
+            
           ) : (
             "Form not found!"
           );
@@ -131,3 +139,7 @@ const FormModal = ({table, type, data, id} : {
 }
 
 export default FormModal;
+
+
+
+
