@@ -40,8 +40,6 @@ const AttendanceChartContainer = async () =>{
         absent : attendanceMap[day].absent,
     }))
 
-    console.log(dayOfWeek, lastMonday, resData, attendanceMap);
-
     resData.forEach(item => {
         const date = new Date(item.date);
 

@@ -71,9 +71,7 @@ export const deleteSubject = async (currentState : CurrentState, data : FormData
 
 
 // create class
-
 export const createClass = async (currentState : CurrentState, data : classSchema)=>{
-    console.log(data.name + "in this server");
     try{
         await prisma.class.create({
             data

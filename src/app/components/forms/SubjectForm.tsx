@@ -20,7 +20,6 @@ const SubjectForm = ({type, data, setOpen, relatedData}:{type : "create" | "upda
     const [ state, formAction ] = useFormState(type === "create" ? createSubject : updateSubject, {success: false, error:false})
 
       const onSubmit = handleSubmit((data)=>{
-        console.log(data);
         formAction(data)
       })
 
@@ -63,7 +62,7 @@ const SubjectForm = ({type, data, setOpen, relatedData}:{type : "create" | "upda
                         {errors.teachers?.message && <p className="text-xs text-red-400">{errors.teachers?.message.toString()}</p> }    
                 </div>
             </div>
-            {state.error && <span className="text-red-500 text-xs">Something went wrong!</span>}
+            {state.error && <span className="text-red-500 text-xs">Something went wrong! {state.error}</span>}
             <button className="bg-blue-400 text-white p-2 rounded-md">{type === "create" ? "Create" : "Update"}</button>
         </form>
     )

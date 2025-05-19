@@ -11,8 +11,6 @@ const EventList = async ({dateParam}:{dateParam : string | undefined}) =>{
         }
     })
 
-    // console.log('data', data, date);
-    
     return data.map((event) => {
         return (
                 <div className='p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-lamaSky even:border-t-lamaPurpule'

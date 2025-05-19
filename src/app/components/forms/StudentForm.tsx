@@ -29,7 +29,6 @@ const StudentForm = ({type, data, setOpen, relatedData}:{type : "create" | "upda
         resolver: zodResolver(schema),
       });
       const onSubmit = handleSubmit((data)=>{
-        console.log(data);
         
       })
     return(

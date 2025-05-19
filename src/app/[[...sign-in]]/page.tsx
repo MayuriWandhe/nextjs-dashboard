@@ -11,8 +11,6 @@ const LoginPage = () =>{
 
     const { isSignedIn, user, isLoaded } = useUser()
 
-    console.log(user);
-
     const router = useRouter();
     
     useEffect(()=>{

@@ -76,8 +76,6 @@ const AssignmentsListPage= async({
     const {page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
-    console.log(searchParams);
-
     // URL Conditions
 
     const query : Prisma.AssignmentWhereInput = {};

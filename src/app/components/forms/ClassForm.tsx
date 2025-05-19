@@ -20,7 +20,6 @@ const ClassForm = ({type, data, setOpen, relatedData}:{type : "create" | "update
     const [ state, formAction ] = useFormState(type === "create" ? createClass : updateClass, {success: false, error:false})
 
       const onSubmit = handleSubmit((data)=>{
-        console.log(data);
         formAction(data)
       })
 

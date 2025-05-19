@@ -11,8 +11,7 @@ const EventCalendarContainer = async ({
     };
 }) =>{
     const { date } = searchParams;
-    console.log('searchParams', searchParams);
-    
+  
     return(
         <div className='bg-white p-4 rounded-md'>
             <EventCounter />

@@ -200,8 +200,6 @@ async function main() {
       },
     });
   }
-
-  console.log("Seeding completed successfully.");
 }
 
 main()

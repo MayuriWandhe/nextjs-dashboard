@@ -10,8 +10,7 @@ const TableSearchPage = () =>{
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) =>{
         
         e.preventDefault()
-        console.log("This is event log : ",e);
-        
+
         const value = (e.currentTarget[0] as HTMLInputElement).value;
 
         const params = new URLSearchParams(window.location.search);

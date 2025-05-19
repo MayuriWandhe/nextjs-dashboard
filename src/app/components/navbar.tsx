@@ -10,8 +10,6 @@ import { currentUser } from "@clerk/nextjs/server";
 const Navbar = () =>{
     // const user = await currentUser();
     const {  user } = useUser()
-
-    console.log(user , "user");
     
     return (
         <div className="flex item-centre justify-between p-4">

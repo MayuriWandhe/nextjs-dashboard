@@ -81,8 +81,6 @@ const ExamsListPage = async({
     const {page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
-    console.log(searchParams);
-
     const query : Prisma.ExamWhereInput = {};
     query.lesson = {};
     // URL Conditions

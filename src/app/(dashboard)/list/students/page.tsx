@@ -77,8 +77,6 @@ const StudentListPage =  async({
     const {page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
-    console.log(searchParams);
-
     const query : Prisma.StudentWhereInput = {};
 
     // URL Conditions
