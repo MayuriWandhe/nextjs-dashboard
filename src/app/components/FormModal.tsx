@@ -6,13 +6,14 @@ import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useFormState } from "react-hook-form";
-import { deleteClass, deleteSubject } from "../../lib/actions";
+import { deleteClass, deleteSubject, deleteTeacher } from "../../lib/actions";
 import { error } from "console";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from 'next/link'
 import { FormContainerProps } from "./FormContainer";
+import { useFormState } from "react-dom";
+
 // import ClassForm from "./forms/ClassForm";
 // import SubjectForm from "./forms/SubjectForm";
 // import TeacherForm from "./forms/TeacherForm";
@@ -21,7 +22,7 @@ import { FormContainerProps } from "./FormContainer";
 const deleteActionMap = {
     subject : deleteSubject,
     class : deleteClass,
-    teacher : deleteSubject,
+    teacher : deleteTeacher,
     student : deleteSubject,
     parent : deleteSubject,
     lesson : deleteSubject,
@@ -81,7 +82,7 @@ const FormModal = ({
     const [open, setOpen] = useState(false);
 
     const Form = () =>{
-        // const [state, formAction] = useFormState(deleteActionMap[table], { success : false, error : false });
+        const [state, formAction] = useFormState(deleteActionMap[table], { success : false, error : false });
 
         const router = useRouter();
 
@@ -95,13 +96,15 @@ const FormModal = ({
         //     }
         //   })
 
-        // useEffect(() => {
-        //     if (state.success) {
-        //       toast(`${table} has been deleted!`);
-        //       setOpen(false);
-        //       router.refresh();
-        //     }
-        //   }, [state, router]);
+        useEffect(() => {
+            if (state.success) {
+              toast(`${table} has been deleted!`);
+              setOpen(false);
+              router.refresh();
+            }else{
+                toast('Something went wrong!')
+            }
+          }, [state, router]);
               
         return type === "delete" && data ? (
             <form action={formAction} className="p-4 flex flex-col gap-4">
@@ -112,14 +115,12 @@ const FormModal = ({
         ) : type === "create" || type === "update" ? (
             // <StudentForm type="create"/>
             forms[table](setOpen, type,data, relatedData)
-            
           ) : (
             "Form not found!"
           );
     }
     return (
         <>
-        
             <button className={`${size} flex items-center justify-center rounded-full ${bgColor}`}  onClick={() => setOpen(true)}>
                 {type === 'create' && (
                     <IoMdAdd />

@@ -117,11 +117,10 @@ const SubjectListPage =  async({
                             <FaSortAmountDown />
                         </button>
                         { role === 'admin' && 
-                        <FormContainer table="subject" type="create"/>
-                        // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-                        //     <FaPlus />
-
-                        // </button>
+                            <FormContainer table="subject" type="create"/>
+                            // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                            //     <FaPlus />
+                            // </button>
                         }
                     </div>
                 </div>

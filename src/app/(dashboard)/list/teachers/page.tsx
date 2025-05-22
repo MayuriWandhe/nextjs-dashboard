@@ -14,6 +14,7 @@ import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
 import { role } from "../../../../lib/util";
+import FormContainer from "../../../components/FormContainer";
 
 type TeacherList = Teacher & { subjects : Subject[] } & { classes : Class[] }
 const colums = [
@@ -60,10 +61,9 @@ const renderRow = (item : TeacherList) =>(
                 <Link href={`/list/teachers/${item.id}`}>
                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaEye /></button>
                 </Link>
-                {role === "admin" &&(
-                    //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
-                    <FormModal table="teacher" type="delete" id={item.id} />
-                )}
+                {/* {role === "admin" &&( */}
+                    <FormContainer table="teacher" type="delete" id={item.id} />
+                {/* )} */}
             </div>
         </td>
     </tr>
@@ -126,10 +126,12 @@ const TeacherListPage = async({
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <FaSortAmountDown />
                         </button>
-                       {role === 'admin'  &&( <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                       {/* {role === 'admin'  && (*/}
+                        <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             {/* <FaPlus /> */}
-                            <FormModal table="teacher" type="create"/>
-                        </button>)}
+                            <FormContainer table="teacher" type="create"/>
+                        </button>
+                    {/* )} */}
                     </div>
                 </div>
             </div>

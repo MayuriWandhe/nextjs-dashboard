@@ -19,23 +19,25 @@ const ClassForm = ({type, data, setOpen, relatedData}:{type : "create" | "update
     //   After react 19 it'll be useaction
     const [ state, formAction ] = useFormState(type === "create" ? createClass : updateClass, {success: false, error:false})
 
-      const onSubmit = handleSubmit((data)=>{
-        formAction(data)
-      })
+    const onSubmit = handleSubmit((data)=>{
+    formAction(data)
+    })
 
-      const router = useRouter();
+    const router = useRouter();
 
-      useEffect(()=>{
-        if(state.success){
-            toast(`Subject has been ${type === 'create' ? 'created' : 'updated' }!`);
-            setOpen(false);
-            router.refresh();
-        }else if(state.error){
-            toast('Something went wrong!')
-        }
-      })
+    useEffect(()=>{
+    if(state.success){
+        toast(`Subject has been ${type === 'create' ? 'created' : 'updated' }!`);
+        setOpen(false);
+        router.refresh();
+    }else if(state.error){
+        console.log(data, formAction, state);
 
-      const { teachers, grades } = relatedData;      
+        toast('Something went wrong!')
+    }
+    })
+
+    const { teachers, grades } = relatedData;      
 
     return(
         <form className="flex flex-col gap-8" onSubmit={onSubmit}>
@@ -54,7 +56,7 @@ const ClassForm = ({type, data, setOpen, relatedData}:{type : "create" | "update
                           {...register("supervisorId")} defaultValue={data?.teachers}>
                             {teachers.map(
                               (teacher : { id: string; name : string; surname : string}) => (
-                                <option value={teacher.id} key={teacher.id}>
+                                <option value={teacher.id} key={teacher.id}  selected={data && data.teacherId === data.supervisorId}>
                                 {teacher.name + " " + teacher.surname}
                                 </option>
                               )
@@ -74,7 +76,7 @@ const ClassForm = ({type, data, setOpen, relatedData}:{type : "create" | "update
                           {...register("gradeId")} defaultValue={data?.gradeId}>
                             {grades.map(
                               (grade : { id: string; level: number}) => (
-                                <option value={grade.id} key={grade.id}>
+                                <option value={grade.id} key={grade.id}  selected={data && data.id === data.gradeId}>
                                 {grade.level}
                                 </option>
                               )
