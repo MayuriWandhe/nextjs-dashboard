@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import Image from "next/image";
 import { MdOutlineBloodtype } from "react-icons/md";
 import { BsCalendarEvent } from "react-icons/bs";
@@ -14,8 +14,46 @@ import Announcement from "../../../../components/Announcment";
 import Link from "next/link";
 import Performance from "../../../../components/Performance";
 import FormModal from "../../../../components/FormModal";
+import BigCalendarContainer from "../../../../components/BigCalendarContainer";
+import { Teacher } from "@prisma/client";
+import prisma from "../../../../../lib/prisma";
+import { notFound } from "next/navigation";
+import FormContainer from "../../../../components/FormContainer";
+import { role } from "../../../../../lib/util";
+import { auth } from "@clerk/nextjs/server";
 
-const SingleTeacherPage = () =>{
+const SingleTeacherPage = async ( 
+    { params : {id},
+}:{
+    params : {id: string};
+}) =>{
+
+
+const { userId, sessionClaims } = auth();
+const role = ( sessionClaims?.metadata as {role? : string})?.role
+
+    const teacher : 
+       | (Teacher &  {
+            _count : { subjects: number; lessons : number; classes : number}
+        }) 
+       | null = await prisma.teacher.findUnique({
+        where : {id},
+        include : {
+            _count : {
+                select : {
+                    subjects : true,
+                    classes : true,
+                    lessons : true
+                }
+            }
+        }
+    })
+
+    console.log(teacher);
+    
+    if(!teacher){
+        return notFound();
+    }
     return (
         <div className="flex p-4 flex-col xl:flex-row gap-4">
             {/* Left */}
@@ -25,43 +63,33 @@ const SingleTeacherPage = () =>{
                     {/* User info card */}
                     <div className="bg-lamaSky py-6 px-4 rounded-md flex-1 flex gap-4">
                         <div className="w-1/3">
-                            {/* <Image src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1200" alt={''} 
-                            width={144} height={144} className=''/> */}
+                            <Image src={teacher.img || '/noAvatar.png'} alt={''} 
+                            width={144} height={144} className=''/>
                         </div>
                         <div className="w-2/3 flex flex-col justify-between gap-4">
                         <div className="flex ietms-center gap-4">
-                            <h1 className="text-xl font-semibold">Leonard Snyder</h1>
-                            <FormModal table="teacher" type="update" data={{
-                                id: 1,
-                                username : "test user",
-                                email : "user@gmail.com",
-                                password : "12345678",
-                                firstName : "testUserName",
-                                lastName : "testUserLastName",
-                                phone : "+91 1234567890",
-                                address : "test address",
-                                bloodType : "O +ve",
-                                birthday : "1999-07-25",
-                                sex : "female",
-                            }}/>
+                            <h1 className="text-xl font-semibold">{teacher.name + " " + teacher.surname}</h1>
+                          {/* {role === 'admin' && ( */}
+                            <FormContainer table="teacher" type="update" data={teacher}/>
+                          {/* )}   */}
                         </div>
                             <p className="text-sm text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
                             <div className="flex item-center justify-between gap-2 flex-wrap text-xs font-medium">
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <MdOutlineBloodtype width={40} hanging={40}/>
-                                    <span>A+</span>
+                                    {/* <span>{teacher.bloodType}</span> */}
                                 </div>
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <BsCalendarEvent width={40} hanging={40}/>
-                                    <span>January 2025</span>
+                                    <span>{new Intl.DateTimeFormat("en-GB").format(teacher.birthday)}</span>
                                 </div>
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <TfiEmail width={40} hanging={40}/>
-                                    <span>user@gmail.com</span>
+                                    <span>{teacher.email || '-'}</span>
                                 </div>
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <FiPhone width={40} hanging={40}/>
-                                    <span>+91 935 980 9714</span>
+                                    <span>{teacher.phone || '-'}</span>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +108,7 @@ const SingleTeacherPage = () =>{
                         <div className="bg-white w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
                             <FcMindMap width={24} height={24} />
                             <div className="">
-                                <h1 className="text-xl font-semibold">6</h1>
+                                <h1 className="text-xl font-semibold">{teacher._count.subjects}</h1>
                                 <span className="text-sm text-gray-400">Breanches</span>
                             </div>
                         </div>
@@ -88,7 +116,7 @@ const SingleTeacherPage = () =>{
                         <div className="bg-white w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
                             <FcRules width={24} height={24} />
                             <div className="">
-                                <h1 className="text-xl font-semibold">9</h1>
+                                <h1 className="text-xl font-semibold">{teacher._count.lessons}</h1>
                                 <span className="text-sm text-gray-400">Lessons</span>
                             </div>
                         </div>
@@ -96,7 +124,7 @@ const SingleTeacherPage = () =>{
                         <div className="bg-white w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
                             <FcReading width={24} height={24} />
                             <div className="">
-                                <h1 className="text-xl font-semibold">6</h1>
+                                <h1 className="text-xl font-semibold">{teacher._count.classes}</h1>
                                 <span className="text-sm text-gray-400">Classes</span>
                             </div>
                         </div>
@@ -105,7 +133,7 @@ const SingleTeacherPage = () =>{
                 {/* Bottom */}
                 <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
                     <h1>Teacher's Schedule</h1>
-                    <BigCalendarContainer />
+                    {/* <BigCalendarContainer type="teacherId" id="1"  /> */}
                 </div>
             </div>
             {/* Left */}

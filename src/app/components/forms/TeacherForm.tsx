@@ -74,9 +74,9 @@ import { CldUploadWidget } from 'next-cloudinary';
                         register={register}
                         error={errors.birthday}
                         type="date"
-                        />
+                    />
                     <InputField label="Blood Type" name="bloodType" defaultValue={data?.bloodType} register={register} error={errors.bloodType}  />
-             
+                    <InputField label="Id" name="id" defaultValue={data?.id} register={register} error={errors?.id} hidden />
                     <div className="flex flex-col gap-2 w-full md:w-1/4">
                         <label className="text-xs text-gray-400 flex text-start">Subject</label>
                         <select multiple className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm" {...register("subjects")} defaultValue={data?.subjects}>

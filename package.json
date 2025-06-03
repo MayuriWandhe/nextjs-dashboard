@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@clerk/elements": "^0.23.15",
-    "@clerk/nextjs": "^6.15.1",
+    "@clerk/nextjs": "^6.19.5",
     "@hookform/resolvers": "^4.1.3",
     "@prisma/client": "^6.5.0",
     "flat-color-icons": "^1.1.0",

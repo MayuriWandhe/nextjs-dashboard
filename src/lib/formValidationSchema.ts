@@ -32,7 +32,7 @@ export const teacherSchema = z.object({
   name : z.string().min(1, {message : 'First name is required!'}),
   surname : z.string().min(1, {message : 'Last name is required!'}),
   email: z.string().email({message : 'Invalid email address!'}).optional().or(z.literal("")),
-  password: z.string().min(8, {message : 'Password must be 8 characters long!'}),
+  password: z.string().min(8, {message : 'Password must be 8 characters long!'}).optional().or(z.literal("")),
   phone : z.string().optional(),
   address : z.string(),
   img : z.string().optional(),
