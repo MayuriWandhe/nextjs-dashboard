@@ -13,7 +13,14 @@ import FormModal from "../../../components/FormModal";
 import prisma from "../../../../lib/prisma";
 import { ITEM_PER_PAGE } from "../../../../lib/settings";
 import { Class, Prisma, Student } from "@prisma/client";
+import FormContainer from "../../../components/FormContainer";
 import { role } from "../../../../lib/util";
+import { auth } from "@clerk/nextjs/server";
+
+// const { userId, sessionClaims } = auth();
+// const role = (sessionClaims?.metadata as { role?: string })?.role;
+
+
 
 type StudentList = Student & { class : Class}
 
@@ -74,6 +81,8 @@ const StudentListPage =  async({
 }:{
     searchParams : { [key : string ] : string } | undefined; 
 }) =>{
+
+
     const {page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
@@ -112,6 +121,9 @@ const StudentListPage =  async({
         }),
         prisma.student.count({where : query})
     ])
+
+    console.log('role from students ', role);
+    
     
     return (
         <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -129,7 +141,7 @@ const StudentListPage =  async({
                         </button>
                         { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             {/* <FaPlus /> */}
-                            <FormModal table="student" type="create" />
+                            <FormContainer table="student" type="create" />
                         </button>}
                     </div>
                 </div>

@@ -133,7 +133,7 @@ const role = ( sessionClaims?.metadata as {role? : string})?.role
                 {/* Bottom */}
                 <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
                     <h1>Teacher's Schedule</h1>
-                    {/* <BigCalendarContainer type="teacherId" id="1"  /> */}
+                    <BigCalendarContainer type="teacherId" id={teacher.id}  />
                 </div>
             </div>
             {/* Left */}

@@ -17,6 +17,9 @@ import { auth } from "@clerk/nextjs/server";
 import { Class, Student } from "@prisma/client";
 import prisma from "../../../../../lib/prisma";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import StudentAttendanceCard from "../../../../components/StudentAttendanceCard";
+import BigCalendarContainer from "../../../../components/BigCalendarContainer";
 
 const SingleStudentPage = async (
     {
@@ -26,8 +29,8 @@ const SingleStudentPage = async (
     }
 ) =>{
 
-    const {userId, sessionClaims } = auth();
-    const role = ( sessionClaims?.metadata as {role? : string})?.role
+    // const {userId, sessionClaims } = auth();
+    // const role = ( sessionClaims?.metadata as {role? : string})?.role
 
 
     const student : 
@@ -87,10 +90,10 @@ const SingleStudentPage = async (
                         {/* Cards */}
                         <div className="bg-white w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
                             <FcDataSheet width={24} height={24} />
-                            <div className="">
-                                <h1 className="text-xl font-semibold">90%</h1>
-                                <span className="text-sm text-gray-400">Attendance</span>
-                            </div>
+                            <Suspense fallback="loading...">
+                                <StudentAttendanceCard id={student.id}/>
+                            </Suspense>
+                           
                         </div>
 
                         <div className="bg-white w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%]">
@@ -121,7 +124,7 @@ const SingleStudentPage = async (
                 {/* Bottom */}
                 <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
                     <h1>Student's Schedule</h1>
-                    {/* <BigCalendar /> */}
+                    <BigCalendarContainer type="classId" id={student.class.id}/>
                 </div>
             </div>
             {/* Left */}
