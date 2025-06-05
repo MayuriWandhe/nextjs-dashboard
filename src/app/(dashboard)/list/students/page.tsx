@@ -67,10 +67,11 @@ const renderRow = (item : StudentList) =>(
                 <Link href={`/list/students/${item.id}`}>
                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaEye /></button>
                 </Link>
-                {role === "admin" &&(
-                    //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                {/* {role === "admin" &&( */}
+                    {/* //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button> */}
                     <FormModal table="student" type="delete" id={item.id} />
-                )}
+                    
+                {/* )} */}
             </div>
         </td>
     </tr>

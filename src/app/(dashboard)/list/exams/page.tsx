@@ -16,6 +16,7 @@ import { ITEM_PER_PAGE } from "../../../../lib/settings";
 import prisma from "../../../../lib/prisma";
 import { currentUserId, role } from "../../../../lib/util";
 import { currentUser } from "@clerk/nextjs/server";
+import FormContainer from "../../../components/FormContainer";
 
 type ExamsList = Exam & {lesson : Lesson} & {class : Class} & {teacher : Teacher}
 
@@ -59,14 +60,14 @@ const renderRow = (item : ExamsList) =>(
                 {/* <Link href={`/list/teachers/${item.id}`}>
                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
                 </Link> */}
-                {( role === "admin" ||  role === "teacher" )&& (
-                    //  <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                {/* {( role === "admin" ||  role === "teacher" )&& ( */}
+                  {/* <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button> */}
                     <>
-                        <FormModal table="event" type="update" data={item} />
-                        <FormModal table="event" type="delete" id={item.id} />
+                        <FormContainer table="exam" type="update" data={item} />
+                        <FormContainer table="exam" type="delete" id={item.id} />
                     </>
             
-                )}
+                {/* )} */}
             </div>
         </td>
     </tr>
@@ -168,10 +169,10 @@ const ExamsListPage = async({
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <FaSortAmountDown />
                         </button>
-                        { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                        {/* { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow"> */}
                             {/* <FaPlus /> */}
-                            <FormModal table="event" type="create" />
-                        </button>}
+                            <FormContainer table="exam" type="create" />
+                        {/* </button>} */}
                     </div>
                 </div>
             </div>

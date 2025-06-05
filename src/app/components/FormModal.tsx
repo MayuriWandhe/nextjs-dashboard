@@ -170,6 +170,7 @@
 
 import {
   deleteClass,
+  deleteExam,
   deleteStudent,
   deleteSubject,
   deleteTeacher,
@@ -192,7 +193,7 @@ const deleteActionMap = {
   class: deleteClass,
   teacher: deleteTeacher,
   student: deleteStudent,
-//   exam: deleteExam,
+  exam: deleteExam,
 // TODO: OTHER DELETE ACTIONS
   parent: deleteSubject,
   lesson: deleteSubject,
@@ -220,9 +221,9 @@ const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
 const ClassForm = dynamic(() => import("./forms/ClassForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-// const ExamForm = dynamic(() => import("./forms/ExamForm"), {
-//   loading: () => <h1>Loading...</h1>,
-// });
+const ExamForm = dynamic(() => import("./forms/ExamForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
 // TODO: OTHER FORMS
 
 const forms: {
@@ -265,15 +266,15 @@ const forms: {
       relatedData={relatedData}
     />
   ),
-//   exam: (setOpen, type, data, relatedData) => (
-//     <ExamForm
-//       type={type}
-//       data={data}
-//       setOpen={setOpen}
-//       relatedData={relatedData}
-//     />
-//     // TODO OTHER LIST ITEMS
-//   ),
+  exam: (setOpen, type, data, relatedData) => (
+    <ExamForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+    // TODO OTHER LIST ITEMS
+  ),
 };
 
 const FormModal = ({
@@ -299,6 +300,9 @@ const FormModal = ({
       error: false,
     });
 
+    
+    console.log( ' : formAction : ' ,formAction, table, state , data)
+
     const router = useRouter();
 
     useEffect(() => {
@@ -319,12 +323,12 @@ const FormModal = ({
           Delete
         </button>
       </form>
-    ) : type === "create" || type === "update" ? (
-      forms[table](setOpen, type, data, relatedData)
-    ) : (
-      "Form not found!"
-    );
-  };
+      ) : type === "create" || type === "update" ? (
+        forms[table](setOpen, type, data, relatedData)        
+      ) : (
+        "Form not found!"
+      );
+    };
 
   return (
     <>
