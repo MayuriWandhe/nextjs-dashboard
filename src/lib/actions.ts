@@ -238,55 +238,59 @@ export const deleteTeacher = async (currentState : CurrentState, data : FormData
 
 
 // create Student
-export const createStudent = async (currentState : CurrentState, data : StudentSchema)=>{
-    try{
+export const createStudent = async (
+    currentState: CurrentState,
+    data: StudentSchema
+  ) => {
+    console.log(data);
+    try {
+      const classItem = await prisma.class.findUnique({
+        where: { id: data.classId },
+        include: { _count: { select: { students: true } } },
+      });
+  
+      if (classItem && classItem.capacity === classItem._count.students) {
+        return { success: false, error: true };
+      }
+    //   const clerkClient = await getClerkClient() // ✅ Call and await
+      const user = await clerkClient.users.createUser({
+        username: data.username,
+        password: data.password,
+        firstName: data.name,
+        lastName: data.surname,
+        publicMetadata:{role:"student"}
+      });
 
-
-        const classItem = await prisma.class.findUnique({
-            where : { id : data.classId},
-            include : { _count : {select : {students : true}}}
-        })
-
-        if(classItem && classItem.capacity === classItem._count.students){
-            return {success : false, error: true};
-        }
-
-        const user = await clerkClient.users.createUser({
-            username : data.username,
-            password : data.password,
-            firstName : data.name,
-            lastName : data.surname,
-            publicMetadata : {role:'student'}
-        })
-
-        await prisma.student.create({
-            data : {
-                id : user.id,
-                username : data.name,
-                name : data.name,
-                surname : data.surname,
-                email : data.email,
-                phone : data.phone,
-                address : data.address,
-                img : data.img,
-                bloodType : data.bloodType,
-                sex : data.sex,
-                birthday : data.birthday,
-                gradeId :  data.gradeId,
-                classId :  data.classId,
-                parentId :  data.parentId,
-
-            }
-        })
-        console.log( data);
-        // revalidatePath("/list/students");
-        return { success : true, error: false}
-    }catch (err){
-        console.log(err, data);
-        return { success : false, error: true}
+      console.log(user);
+      
+  
+      await prisma.student.create({
+        data: {
+          id: user.id,
+          username: data.username,
+          name: data.name,
+          surname: data.surname,
+          email: data.email || null,
+          phone: data.phone || null,
+          address: data.address,
+          img: data.img || null,
+          bloodType: data.bloodType,
+          sex: data.sex,
+          birthday: data.birthday,
+          gradeId: data.gradeId,
+          classId: data.classId,
+          parentId: data.parentId,
+        },
+      });
+  
+      // revalidatePath("/list/students");
+      return { success: true, error: false };
+    } catch (err) {
+      console.log(err);
+      return { success: false, error: true };
     }
-}
-
+  };
+  
 // update Student
 export const updateStudent = async (currentState : CurrentState, data : StudentSchema)=>{
     console.log(data.name + "in this server");

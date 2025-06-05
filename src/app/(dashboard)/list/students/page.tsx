@@ -139,10 +139,12 @@ const StudentListPage =  async({
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <FaSortAmountDown />
                         </button>
-                        { role === 'admin' && <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                        {/* { role === 'admin' &&  */}
+                        <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             {/* <FaPlus /> */}
                             <FormContainer table="student" type="create" />
-                        </button>}
+                        </button>
+                        {/* } */}
                     </div>
                 </div>
             </div>

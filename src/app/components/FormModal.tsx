@@ -181,6 +181,11 @@ import { Dispatch, JSX, SetStateAction, useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
+import { IoCreateOutline } from "react-icons/io5";
+import { IoMdAdd } from "react-icons/io";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { IoMdClose } from "react-icons/io";
+
 
 const deleteActionMap = {
   subject: deleteSubject,
@@ -327,7 +332,17 @@ const FormModal = ({
         className={`${size} flex items-center justify-center rounded-full ${bgColor}`}
         onClick={() => setOpen(true)}
       >
-        <Image src={`/${type}.png`} alt="" width={16} height={16} />
+             <button className={`${size} flex items-center justify-center rounded-full ${bgColor}`}  onClick={() => setOpen(true)}>
+                 {type === 'create' && (
+                    <IoMdAdd />
+               )}
+              {type === 'update' && (
+                  <IoCreateOutline />
+              )}
+              {type === 'delete' && (
+                  <RiDeleteBin6Line />
+              )}
+          </button>
       </button>
       {open && (
         <div className="w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
@@ -337,7 +352,7 @@ const FormModal = ({
               className="absolute top-4 right-4 cursor-pointer"
               onClick={() => setOpen(false)}
             >
-              <Image src="/close.png" alt="" width={14} height={14} />
+             <IoMdClose />
             </div>
           </div>
         </div>

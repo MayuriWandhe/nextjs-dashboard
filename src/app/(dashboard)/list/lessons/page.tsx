@@ -107,24 +107,6 @@ const LessonsListPage = async({
         parent : { lessons : { some : { teacherId : currentUserId } } },
     }
 
-    query.OR = [
-        { classId : null},
-        { class : roleConditions[role as keyof typeof roleConditions]  || {}, }
-    ]
-
-    // switch (role) {
-    //     case 'admin':
-    //         break;
-    //     case 'teacher':
-    //         query.OR = [
-    //             {classId : null},
-    //             {class : {lessons : {some : {teacherId : currentUserId!}}}}
-    //         ]
-    //     break;
-    
-    //     default:
-    //         break;
-    // }
     
     const [data, count ] = await prisma.$transaction([
          prisma.lesson.findMany({
