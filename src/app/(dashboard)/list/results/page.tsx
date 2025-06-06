@@ -142,10 +142,11 @@ const ResultsListPage = async({
         case 'student' : 
             query.studentId = currentUserId!;
             break;
-        case 'parent' :
-            query.stuedentId = {
-                parentId : currentUserId!;
-            }
+        case "parent":
+            query.student = {
+                parentId: currentUserId!,
+            };
+            break;
         default:
             break;
     }

@@ -33,7 +33,7 @@ const ExamForm = ({type, data, setOpen, relatedData}:{type : "create" | "update"
         }else if(state.error){
             toast('Something went wrong!')
         }
-      })
+      },[state, router, type, setOpen])
 
       const { lessons } = relatedData;   
       

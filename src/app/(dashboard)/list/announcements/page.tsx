@@ -20,61 +20,62 @@ import { currentUserId, role } from "../../../../lib/util";
 type AnnouncementsList = Announcement & {class : Class}
 
 
-
-const colums = [
-    {
-        header : "Info", accessor : "Info"
-    },
-    {
-        header : "Title", accessor : "title", className : "hidden md:table-cell"
-    },
-    {
-        header : "Class", accessor : "class", className : "hidden lg:table-cell"
-    },
-    {
-        header : "Date", accessor : "Date", className : "hidden lg:table-cell"
-    },
-    ...(role === 'admin' ?[{
-        header : "Action", accessor : "action", className : "hidden lg:table-cell"
-    }] : []),
-]
-
-
-
-    
-const renderRow = (item : AnnouncementsList) =>(
-    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpuleLight">
-        <td className="flex items-center gap-4 p-4">
-            {/* <FaRegUserCircle className="w-7 h-7 md:hidden xl:block rounded-full object-cover"/> */}
-            {/* <img src="{item.photo}" alt="" width={40} height={40} className="md:hidden xl:bolck w-10 h-10 rounded-full object-cover"/> */}
-            <div className="flex-flex-col">
-                <h3 className="font-semibold">{item.title}</h3>
-            </div>
-        </td>
-        <td className="hidden md:table-cell">{item.description}</td>
-        <td className="hidden md:table-cell">{item.class.name}</td>
-        <td className="hidden md:table-cell">{new Intl.DateTimeFormat("en-US").format(item.date)}</td>
-
-
-        <td>
-            <div className="flex items-center gap-2">
-                <Link href={`/list/teachers/${item.id}`}>
-                    <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
-                </Link>
-                {role === "admin" &&(
-                     <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
-                )}
-            </div>
-        </td>
-    </tr>
-)
-
-
 const AnnouncementsListPage = async({
     searchParams,
 }:{
     searchParams : { [key : string ] : string } | undefined; 
 }) =>{
+
+    const { userId , sessionClaims } = auth();
+    const role = (sessionClaims?.metadata as {role? : string})?.role
+    const currentUserId = userId;
+
+    const colums = [
+        {
+            header : "Info", accessor : "Info"
+        },
+        {
+            header : "Title", accessor : "title", className : "hidden md:table-cell"
+        },
+        {
+            header : "Class", accessor : "class", className : "hidden lg:table-cell"
+        },
+        {
+            header : "Date", accessor : "Date", className : "hidden lg:table-cell"
+        },
+        ...(role === 'admin' ?[{
+            header : "Action", accessor : "action", className : "hidden lg:table-cell"
+        }] : []),
+    ]
+
+            
+    const renderRow = (item : AnnouncementsList) =>(
+        <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpuleLight">
+            <td className="flex items-center gap-4 p-4">
+                {/* <FaRegUserCircle className="w-7 h-7 md:hidden xl:block rounded-full object-cover"/> */}
+                {/* <img src="{item.photo}" alt="" width={40} height={40} className="md:hidden xl:bolck w-10 h-10 rounded-full object-cover"/> */}
+                <div className="flex-flex-col">
+                    <h3 className="font-semibold">{item.title}</h3>
+                </div>
+            </td>
+            <td className="hidden md:table-cell">{item.description}</td>
+            <td className="hidden md:table-cell">{item.class.name}</td>
+            <td className="hidden md:table-cell">{new Intl.DateTimeFormat("en-US").format(item.date)}</td>
+
+
+            <td>
+                <div className="flex items-center gap-2">
+                    <Link href={`/list/teachers/${item.id}`}>
+                        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky"><FaRegEdit /></button>
+                    </Link>
+                    {role === "admin" &&(
+                        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurpuleLight"><RiDeleteBin6Line /></button>
+                    )}
+                </div>
+            </td>
+        </tr>
+    )
+
     const {page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 

@@ -42,7 +42,7 @@ import { CldUploadWidget } from 'next-cloudinary';
     }else if(state.error){
         toast('Something went wrong!', state.error)
     }
-    })
+    },[state, router, type, setOpen])
 
     const { grades, classes } = relatedData;     
 

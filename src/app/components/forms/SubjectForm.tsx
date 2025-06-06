@@ -33,7 +33,7 @@ const SubjectForm = ({type, data, setOpen, relatedData}:{type : "create" | "upda
         }else if(state.error){
             toast('Something went wrong!')
         }
-      })
+      },[state, router, type, setOpen])
 
       const { teachers } = relatedData;      
 

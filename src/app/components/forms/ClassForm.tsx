@@ -35,7 +35,7 @@ const ClassForm = ({type, data, setOpen, relatedData}:{type : "create" | "update
 
         toast('Something went wrong!')
     }
-    })
+    },[state, router, type, setOpen])
 
     const { teachers, grades } = relatedData;      
 
