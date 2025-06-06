@@ -19,3 +19,5 @@ services:
       - '3000:3000'
     environment:
       - DATABASE_URL: postgresql://rushali:Pass@123@localhost:5432/School
+    depends_on:
+      - postgress
